@@ -10,5 +10,5 @@ export class CreatePostDto {
   body: string;
 
   @IsInt()
-  userId;
+  userId: number;
 }

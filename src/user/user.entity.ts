@@ -1,6 +1,6 @@
-import { Post } from 'src/post/post.entity';
-import { Todo } from 'src/todos/todos.enitity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Post } from '../post/post.entity';
+import { Todo } from '../todos/todos.enitity';
 
 @Entity()
 export class User {

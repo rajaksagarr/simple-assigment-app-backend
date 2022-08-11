@@ -20,6 +20,7 @@ import { Post } from './post/post.entity';
       entities: [User, Post, Todo],
       synchronize: true,
       database: 'testdb',
+      logging: true,
     }),
     UserModule,
     PostModule,

@@ -11,9 +11,6 @@ import { Post } from './post/post.entity';
 
 @Module({
   imports: [
-    UserModule,
-    PostModule,
-    TodosModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -22,7 +19,11 @@ import { Post } from './post/post.entity';
       password: 'password',
       entities: [User, Post, Todo],
       synchronize: true,
+      database: 'testdb',
     }),
+    UserModule,
+    PostModule,
+    TodosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -7,37 +7,52 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    nullable: false,
+  })
   name: string;
 
   @Column({
     unique: true,
+    nullable: false,
   })
   username: string;
 
   @Column({
     unique: true,
+    nullable: false,
   })
   phone: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   website: string;
 
   @Column({
     unique: true,
+    nullable: false,
   })
   email: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   street: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   suite: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   city: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   zipcode: string;
 
   @OneToMany(() => Post, (post) => post.user)

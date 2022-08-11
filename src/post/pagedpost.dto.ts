@@ -2,7 +2,7 @@ import { Type } from 'class-transformer';
 import { IsInt, IsPositive, IsSemVer, IsString } from 'class-validator';
 import { PageParams } from '../common/pageParams.interface';
 
-export class PagedRequest implements PageParams {
+export class PagesPostDto implements PageParams {
   @IsInt()
   @Type(() => Number)
   userId: number;

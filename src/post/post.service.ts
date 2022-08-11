@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { User } from '../user/user.entity';
 import { CreatePostDto } from './createpost.dto';
-import { PagedRequest } from './PagedRequest';
+import { PagesPostDto } from './pagedpost.dto';
 import { Post } from './post.entity';
 
 @Injectable()
@@ -30,7 +30,7 @@ export class PostService {
     });
   }
 
-  async getPaged(query: PagedRequest): Promise<Post[]> {
+  async getPaged(query: PagesPostDto): Promise<Post[]> {
     return this.dataSource
       .getRepository(Post)
       .createQueryBuilder('post')

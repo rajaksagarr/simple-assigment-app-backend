@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post as HTTPPost, Query } from '@nestjs/common';
 import { ValidationPipe } from '../validation.pipe';
 import { CreatePostDto } from './createpost.dto';
-import { PagedRequest } from './PagedRequest';
+import { PagesPostDto } from './pagedpost.dto';
 import { Post } from './post.entity';
 import { PostService } from './post.service';
 @Controller('post')
@@ -19,7 +19,7 @@ export class PostController {
   }
 
   @Get('paged')
-  async getPaged(@Query(new ValidationPipe()) query: PagedRequest) {
+  async getPaged(@Query(new ValidationPipe()) query: PagesPostDto) {
     return this.postService.getPaged(query);
   }
 }

@@ -1,5 +1,13 @@
-import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  ValidationPipe,
+} from '@nestjs/common';
 import { CreateUserDto } from './createuser.dto';
+import { PagedUserDto } from './pageduser.dto';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -14,5 +22,10 @@ export class UserController {
   @Get()
   async findAll() {
     return this.userService.findAll();
+  }
+
+  @Get('paged')
+  async getPaged(@Query(new ValidationPipe()) query: PagedUserDto) {
+    return this.userService.getPaged(query);
   }
 }

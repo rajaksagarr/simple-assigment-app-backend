@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { CreateUserDto } from './createuser.dto';
+import { PagedUserDto } from './pageduser.dto';
 import { User } from './user.entity';
 
 @Injectable()
@@ -25,6 +26,16 @@ export class UserService {
     }
 
     return this.userRepository.save(body);
+  }
+
+  async getPaged(query: PagedUserDto) {
+    return this.dataSource
+      .getRepository(User)
+      .createQueryBuilder('user')
+      .orderBy('id')
+      .offset(query.limit * (query.page - 1))
+      .limit(query.limit)
+      .getMany();
   }
 
   async findAll() {

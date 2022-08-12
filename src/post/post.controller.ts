@@ -1,5 +1,11 @@
-import { Body, Controller, Get, Post as HTTPPost, Query } from '@nestjs/common';
-import { ValidationPipe } from '../validation.pipe';
+import {
+  Body,
+  Controller,
+  Get,
+  Post as HTTPPost,
+  Query,
+  ValidationPipe,
+} from '@nestjs/common';
 import { CreatePostDto } from './createpost.dto';
 import { PagesPostDto } from './pagedpost.dto';
 import { Post } from './post.entity';

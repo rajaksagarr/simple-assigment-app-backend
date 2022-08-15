@@ -15,7 +15,7 @@ import { Post } from './post/post.entity';
       type: 'postgres',
       host: 'localhost',
       port: 5432,
-      username: 'postgres',
+      username: 'sagar',
       password: 'password',
       entities: [User, Post, Todo],
       synchronize: true,

@@ -10,6 +10,7 @@ import { CreateTodoDto } from './createtodo.dto';
 import { Todo } from './todos.enitity';
 import { User } from '../user/user.entity';
 import { PagedTodoDto } from './pagedtodo.dto';
+import { PagedResponse } from 'src/common/pageParams.interface';
 
 @Injectable()
 export class TodoService {
@@ -30,22 +31,40 @@ export class TodoService {
     if (!user) {
       throw new BadRequestException('Invalid User id!');
     }
-    return this.todoRespository.save({
+    const data = this.todoRespository.save({
       ...body,
       ...{
         user,
         done: false,
       },
     });
+
+    return {
+      ok: true,
+      data,
+    }
   }
 
-  async getPaged(@Query(new ValidationPipe()) query: PagedTodoDto) {
-    return this.todoRespository
+  async getPaged(@Query(new ValidationPipe()) query: PagedTodoDto): Promise<PagedResponse<Todo>> {
+    const baseQuery = this.todoRespository
       .createQueryBuilder('todo')
       .where('todo.userId = :userId', query)
-      .orderBy('id')
+      .orderBy('id');
+
+    const data = await baseQuery
       .offset(query.limit * (query.page - 1))
       .limit(query.limit)
       .getMany();
+
+    const isNextAvaible = !!(await baseQuery
+      .offset(query.limit * (query.page - 1))
+      .limit(query.limit + 1)
+      .getMany());
+
+    return {
+      isNextAvaible,
+      data,
+      ok: true
+    }
   }
 }

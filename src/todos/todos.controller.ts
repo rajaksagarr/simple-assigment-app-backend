@@ -28,7 +28,7 @@ export class TodosController {
   @Get('paged')
   async getPaged(
     @Query(new ValidationPipe()) query: PagedTodoDto,
-  ): Promise<Todo[]> {
+  ) {
     return this.todoService.getPaged(query);
   }
 }

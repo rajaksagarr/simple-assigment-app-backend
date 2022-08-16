@@ -32,9 +32,9 @@ export class PostService {
       });
       return {
         ok: true,
-        data: savedEntity
-      }
-    } catch(Err) {
+        data: savedEntity,
+      };
+    } catch (Err) {
       return Err;
     }
   }
@@ -51,15 +51,15 @@ export class PostService {
       .limit(query.limit)
       .getMany();
 
-    const isNextAvaible = !!(baseQuery
-      .offset(query.limit * (query.page - 1))
-      .limit(query.limit + 1)
-      .getOne());
+    const isNextAvaible = !!baseQuery
+      .offset(query.limit * query.page)
+      .limit(query.limit)
+      .getOne();
 
     return {
       isNextAvaible,
       data,
-      ok: true
-    }
+      ok: true,
+    };
   }
 }

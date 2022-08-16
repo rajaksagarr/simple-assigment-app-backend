@@ -42,10 +42,12 @@ export class TodoService {
     return {
       ok: true,
       data,
-    }
+    };
   }
 
-  async getPaged(@Query(new ValidationPipe()) query: PagedTodoDto): Promise<PagedResponse<Todo>> {
+  async getPaged(
+    @Query(new ValidationPipe()) query: PagedTodoDto,
+  ): Promise<PagedResponse<Todo>> {
     const baseQuery = this.todoRespository
       .createQueryBuilder('todo')
       .where('todo.userId = :userId', query)
@@ -57,14 +59,14 @@ export class TodoService {
       .getMany();
 
     const isNextAvaible = !!(await baseQuery
-      .offset(query.limit * (query.page - 1))
-      .limit(query.limit + 1)
+      .offset(query.limit * (query.page + 1))
+      .limit(query.limit)
       .getMany());
 
     return {
       isNextAvaible,
       data,
-      ok: true
-    }
+      ok: true,
+    };
   }
 }

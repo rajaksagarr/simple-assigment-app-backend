@@ -19,20 +19,27 @@ export class UserService {
       .getRepository(User)
       .createQueryBuilder('user');
 
-    const usersWithEmails = await queryBuilder.where('user.email = :email', { email: body.email }).getOne();
-    const usersWithPhones = await queryBuilder.where('user.phone = :phone', { phone: body.phone }).getOne();
-    const usersWithUsername = await queryBuilder.where('user.username = :username', { username: body.username }).getOne();
+    const usersWithEmails = await queryBuilder
+      .where('user.email = :email', { email: body.email })
+      .getOne();
+    const usersWithPhones = await queryBuilder
+      .where('user.phone = :phone', { phone: body.phone })
+      .getOne();
+    const usersWithUsername = await queryBuilder
+      .where('user.username = :username', { username: body.username })
+      .getOne();
     if (usersWithEmails || usersWithPhones || usersWithUsername) {
-      let baseMessage = `User with same `;
+      const baseMessage = `User with same `;
       let missingFields = '';
 
-      if (usersWithEmails)
-        missingFields += missingFields ? ', email': "email";
+      if (usersWithEmails) missingFields += missingFields ? ', email' : 'email';
       if (usersWithPhones)
-        missingFields += missingFields ? ', Phone number': 'Phone number';
+        missingFields += missingFields ? ', Phone number' : 'Phone number';
       if (usersWithUsername)
-        missingFields += missingFields ? ', Username': 'Username';
-      throw new BadRequestException(baseMessage+missingFields+" already exists!");
+        missingFields += missingFields ? ', Username' : 'Username';
+      throw new BadRequestException(
+        baseMessage + missingFields + ' already exists!',
+      );
     }
     try {
       const user = await this.userRepository.save(body);
@@ -40,8 +47,7 @@ export class UserService {
       return {
         ok: true,
         data: user,
-      }
-
+      };
     } catch (err) {
       throw new BadRequestException(err);
     }
@@ -53,18 +59,20 @@ export class UserService {
       .createQueryBuilder('user')
       .orderBy('id');
 
-    const data = await baseQuery.offset(query.limit * (query.page - 1))
+    const data = await baseQuery
+      .offset(query.limit * (query.page - 1))
       .limit(query.limit)
       .getMany();
-    const isNextAvaible = !!(await baseQuery.offset(query.limit * (query.page - 1))
-      .limit(query.limit + 1)
-      .getOne())
+    const isNextAvaible = !!(await baseQuery
+      .offset(query.limit * query.page)
+      .limit(+query.limit)
+      .getOne());
 
     return {
       data,
       isNextAvaible,
-      ok: true
-    }
+      ok: true,
+    };
   }
 
   async findAll() {

@@ -59,9 +59,9 @@ export class TodoService {
       .getMany();
 
     const isNextAvaible = !!(await baseQuery
-      .offset(query.limit * (query.page + 1))
+      .offset(query.limit * query.page)
       .limit(query.limit)
-      .getMany());
+      .getOne());
 
     return {
       isNextAvaible,

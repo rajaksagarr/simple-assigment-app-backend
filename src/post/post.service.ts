@@ -51,10 +51,10 @@ export class PostService {
       .limit(query.limit)
       .getMany();
 
-    const isNextAvaible = !!baseQuery
+    const isNextAvaible = !!(await baseQuery
       .offset(query.limit * query.page)
       .limit(query.limit)
-      .getOne();
+      .getOne());
 
     return {
       isNextAvaible,

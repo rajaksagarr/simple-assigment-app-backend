@@ -8,6 +8,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/user.entity';
 import { Todo } from './todos/todos.enitity';
 import { Post } from './post/post.entity';
+import { CommentModule } from './comment/comment.module';
+import { Comment } from './comment/comment.entity';
 
 @Module({
   imports: [
@@ -17,7 +19,7 @@ import { Post } from './post/post.entity';
       port: 5432,
       username: 'postgres',
       password: 'password',
-      entities: [User, Post, Todo],
+      entities: [User, Post, Todo, Comment],
       synchronize: true,
       database: 'testdb',
       logging: true,
@@ -25,6 +27,7 @@ import { Post } from './post/post.entity';
     UserModule,
     PostModule,
     TodosModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

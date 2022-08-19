@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Post } from '../post/post.entity';
 import { Todo } from '../todos/todos.enitity';
+import { Comment } from '../comment/comment.entity';
 
 @Entity()
 export class User {
@@ -60,4 +61,7 @@ export class User {
 
   @OneToMany(() => Todo, (todo) => todo.user)
   todos: Todo[];
+
+  @OneToMany(() => Comment, (comment) => comment.commenterId)
+  commentsGiven: Comment[];
 }

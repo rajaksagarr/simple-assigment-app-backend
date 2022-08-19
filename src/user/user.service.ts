@@ -4,6 +4,7 @@ import { PagedResponse } from 'src/common/pageParams.interface';
 import { DataSource, Repository } from 'typeorm';
 import { CreateUserDto } from './createuser.dto';
 import { PagedUserDto } from './pageduser.dto';
+import { UpdateUserDto } from './updateuser.dto';
 import { User } from './user.entity';
 
 @Injectable()
@@ -34,9 +35,9 @@ export class UserService {
 
       if (usersWithEmails) missingFields += missingFields ? ', email' : 'email';
       if (usersWithPhones)
-        missingFields += missingFields ? ', Phone number' : 'Phone number';
+        missingFields += missingFields ? ', phone number' : 'phone number';
       if (usersWithUsername)
-        missingFields += missingFields ? ', Username' : 'Username';
+        missingFields += missingFields ? ', username' : 'username';
       throw new BadRequestException(
         baseMessage + missingFields + ' already exists!',
       );
@@ -77,5 +78,55 @@ export class UserService {
 
   async findAll() {
     return this.userRepository.find();
+  }
+
+  async updateUser(body: UpdateUserDto) {
+    const queryBuilder = this.dataSource
+      .getRepository(User)
+      .createQueryBuilder('user');
+
+    const usersWithEmails = body.email
+      ? await queryBuilder
+          .where('user.email = :email', { email: body.email })
+          .where('user.id != :id', { id: +body.id })
+          .getOne()
+      : null;
+    const usersWithPhones = body.phone
+      ? await queryBuilder
+          .where('user.phone = :phone', { phone: body.phone })
+          .where('user.id != :id', { id: +body.id })
+          .getOne()
+      : null;
+    const usersWithUsername = body.username
+      ? await queryBuilder
+          .where('user.username = :username', { username: body.username })
+          .where('user.id != :id', { id: +body.id })
+          .getOne()
+      : null;
+    if (usersWithEmails || usersWithPhones || usersWithUsername) {
+      const baseMessage = `User with same `;
+      let missingFields = '';
+
+      if (usersWithEmails) missingFields += missingFields ? ', email' : 'email';
+      if (usersWithPhones)
+        missingFields += missingFields ? ', phone number' : 'phone number';
+      if (usersWithUsername)
+        missingFields += missingFields ? ', username' : 'username';
+      throw new BadRequestException(
+        baseMessage + missingFields + ' already exists!',
+      );
+    }
+    try {
+      const user = await this.userRepository.update(body, {
+        id: +body.id,
+      });
+
+      return {
+        ok: true,
+        data: user,
+      };
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 }

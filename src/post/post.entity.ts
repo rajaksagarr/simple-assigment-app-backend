@@ -1,5 +1,12 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from '../user/user.entity';
+import { Comment } from '../comment/comment.entity';
 
 @Entity()
 export class Post {
@@ -17,4 +24,7 @@ export class Post {
     eager: true,
   })
   user: User;
+
+  @OneToMany(() => Comment, (comment) => comment.post)
+  comments: Comment[];
 }

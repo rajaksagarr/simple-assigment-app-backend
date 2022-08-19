@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsIn, IsInt, IsPositive } from 'class-validator';
+import { IsIn, IsInt, isPositive, IsPositive } from 'class-validator';
 import { PageParams } from '../common/pageParams.interface';
 
 export class PagedTodoDto implements PageParams {
@@ -15,5 +15,6 @@ export class PagedTodoDto implements PageParams {
 
   @IsInt()
   @Type(() => Number)
+  @IsPositive()
   userId: number;
 }

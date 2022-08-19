@@ -1,4 +1,4 @@
-import { IsInt, IsString, Length } from 'class-validator';
+import { IsInt, IsPositive, IsString, Length } from 'class-validator';
 
 export class CreatePostDto {
   @IsString()
@@ -10,5 +10,6 @@ export class CreatePostDto {
   body: string;
 
   @IsInt()
+  @IsPositive()
   userId: number;
 }

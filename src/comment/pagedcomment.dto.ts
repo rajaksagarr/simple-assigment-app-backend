@@ -2,10 +2,10 @@ import { Type } from 'class-transformer';
 import { IsInt, IsPositive } from 'class-validator';
 import { PageParams } from '../common/pageParams.interface';
 
-export class PagesPostDto implements PageParams {
+export class PagedCommentDto implements PageParams {
   @IsInt()
   @Type(() => Number)
-  userId: number;
+  postId: number;
 
   @IsInt()
   @Type(() => Number)

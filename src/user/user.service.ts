@@ -88,19 +88,19 @@ export class UserService {
     const usersWithEmails = body.email
       ? await queryBuilder
           .where('user.email = :email', { email: body.email })
-          .where('user.id != :id', { id: +body.id })
+          .andWhere('user.id != :id', { id: +body.id })
           .getOne()
       : null;
     const usersWithPhones = body.phone
       ? await queryBuilder
           .where('user.phone = :phone', { phone: body.phone })
-          .where('user.id != :id', { id: +body.id })
+          .andWhere('user.id != :id', { id: +body.id })
           .getOne()
       : null;
     const usersWithUsername = body.username
       ? await queryBuilder
           .where('user.username = :username', { username: body.username })
-          .where('user.id != :id', { id: +body.id })
+          .andWhere('user.id != :id', { id: +body.id })
           .getOne()
       : null;
     if (usersWithEmails || usersWithPhones || usersWithUsername) {
@@ -116,10 +116,16 @@ export class UserService {
         baseMessage + missingFields + ' already exists!',
       );
     }
+    const id = body.id;
+    delete body.id;
+
     try {
-      const user = await this.userRepository.update(body, {
-        id: +body.id,
-      });
+      const user = await this.userRepository.update(
+        {
+          id: +id,
+        },
+        body,
+      );
 
       return {
         ok: true,

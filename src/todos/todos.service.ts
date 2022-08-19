@@ -45,9 +45,7 @@ export class TodoService {
     };
   }
 
-  async getPaged(
-    @Query(new ValidationPipe()) query: PagedTodoDto,
-  ): Promise<PagedResponse<Todo>> {
+  async getPaged(query: PagedTodoDto): Promise<PagedResponse<Todo>> {
     const baseQuery = this.todoRespository
       .createQueryBuilder('todo')
       .where('todo.userId = :userId', query)

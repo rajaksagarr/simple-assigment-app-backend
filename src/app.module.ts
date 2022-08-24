@@ -11,20 +11,25 @@ import { Post } from './post/post.entity';
 import { CommentModule } from './comment/comment.module';
 import { Comment } from './comment/comment.entity';
 import { AuthModule } from './auth/auth.module';
-import { AuthService } from './auth/auth.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'password',
-      entities: [User, Post, Todo, Comment],
-      synchronize: true,
-      database: 'testdb',
-      logging: true,
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get('HOST'),
+        port: +configService.get('PORT'),
+        username: configService.get('USERNAME'),
+        password: configService.get('PASSWORD'),
+        database: configService.get('DATABASE'),
+        entities: [User, Todo, Post, Comment],
+        synchronize: true,
+        logging: true,
+      }),
+      inject: [ConfigService],
     }),
     UserModule,
     PostModule,

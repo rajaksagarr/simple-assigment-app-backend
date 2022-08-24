@@ -19,11 +19,10 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Body(new ValidationPipe()) body: AuthDto) {
-    return this.auth.login(body);
+  async login(@Body(new ValidationPipe()) body: AuthDto, @Request() req) {
+    return this.auth.login(req.user);
   }
 
-  @UseGuards(LocalAuthGuard)
   @Post('signup')
   async signup(@Body(new ValidationPipe()) body: CreateUserDto) {
     return this.auth.create(body);

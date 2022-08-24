@@ -4,7 +4,7 @@ import { Strategy } from 'passport-local';
 import { AuthService } from './auth.service';
 
 @Injectable()
-export class LocalService extends PassportStrategy(Strategy) {
+export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private authService: AuthService) {
     super();
   }
@@ -14,6 +14,7 @@ export class LocalService extends PassportStrategy(Strategy) {
     if (!user) {
       throw new UnauthorizedException();
     }
+    delete user.password;
     return user;
   }
 }

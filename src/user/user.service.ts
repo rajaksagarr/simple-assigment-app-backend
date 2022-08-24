@@ -140,7 +140,7 @@ export class UserService {
   }
 
   async findUserByUserNameOrEmail(usernameEmail: string) {
-    const user = await this.userRepository.findOne({
+    return await this.userRepository.findOne({
       where: [
         {
           username: usernameEmail,
@@ -150,10 +150,5 @@ export class UserService {
         },
       ],
     });
-    if (!user) {
-      return null;
-    }
-    delete user.password;
-    return user;
   }
 }

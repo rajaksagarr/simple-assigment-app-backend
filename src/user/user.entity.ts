@@ -56,6 +56,11 @@ export class User {
   })
   zipcode: string;
 
+  @Column({
+    nullable: false,
+  })
+  password: string;
+
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 

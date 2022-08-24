@@ -4,12 +4,15 @@ import {
   Get,
   Post as HTTPPost,
   Query,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreatePostDto } from './createpost.dto';
 import { PagesPostDto } from './pagedpost.dto';
 import { Post } from './post.entity';
 import { PostService } from './post.service';
+@UseGuards(JwtAuthGuard)
 @Controller('post')
 export class PostController {
   constructor(private postService: PostService) {}

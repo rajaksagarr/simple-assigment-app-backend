@@ -10,6 +10,8 @@ import { Todo } from './todos/todos.enitity';
 import { Post } from './post/post.entity';
 import { CommentModule } from './comment/comment.module';
 import { Comment } from './comment/comment.entity';
+import { AuthModule } from './auth/auth.module';
+import { AuthService } from './auth/auth.service';
 
 @Module({
   imports: [
@@ -28,6 +30,7 @@ import { Comment } from './comment/comment.entity';
     PostModule,
     TodosModule,
     CommentModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -4,13 +4,15 @@ import {
   Get,
   Post as HTTPost,
   Query,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateTodoDto } from './createtodo.dto';
 import { PagedTodoDto } from './pagedtodo.dto';
 import { Todo } from './todos.enitity';
 import { TodoService } from './todos.service';
-
+@UseGuards(JwtAuthGuard)
 @Controller('todo')
 export class TodosController {
   constructor(private readonly todoService: TodoService) {}
@@ -26,9 +28,7 @@ export class TodosController {
   }
 
   @Get('paged')
-  async getPaged(
-    @Query(new ValidationPipe()) query: PagedTodoDto,
-  ) {
+  async getPaged(@Query(new ValidationPipe()) query: PagedTodoDto) {
     return this.todoService.getPaged(query);
   }
 }

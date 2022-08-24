@@ -6,6 +6,7 @@ import { CreateUserDto } from './createuser.dto';
 import { PagedUserDto } from './pageduser.dto';
 import { UpdateUserDto } from './updateuser.dto';
 import { User } from './user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -42,9 +43,11 @@ export class UserService {
         baseMessage + missingFields + ' already exists!',
       );
     }
+    const salt = bcrypt.genSaltSync(10);
+    const passowrd = bcrypt.hashSync(body.password, salt);
+    body.password = passowrd;
     try {
       const user = await this.userRepository.save(body);
-
       return {
         ok: true,
         data: user,
@@ -134,5 +137,23 @@ export class UserService {
     } catch (err) {
       throw new BadRequestException(err);
     }
+  }
+
+  async findUserByUserNameOrEmail(usernameEmail: string) {
+    const user = await this.userRepository.findOne({
+      where: [
+        {
+          username: usernameEmail,
+        },
+        {
+          email: usernameEmail,
+        },
+      ],
+    });
+    if (!user) {
+      return null;
+    }
+    delete user.password;
+    return user;
   }
 }

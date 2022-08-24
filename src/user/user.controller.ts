@@ -3,23 +3,18 @@ import {
   Controller,
   Get,
   Patch,
-  Post,
   Query,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { CreateUserDto } from './createuser.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { PagedUserDto } from './pageduser.dto';
 import { UpdateUserDto } from './updateuser.dto';
 import { UserService } from './user.service';
-
+@UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @Post()
-  async create(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
 
   @Patch()
   async update(@Body(new ValidationPipe()) updateUserDto: UpdateUserDto) {

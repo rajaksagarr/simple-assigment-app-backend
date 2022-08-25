@@ -1,12 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PagedResponse } from 'src/common/pageParams.interface';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, EntityManager, Repository } from 'typeorm';
 import { CreateUserDto } from './createuser.dto';
 import { PagedUserDto } from './pageduser.dto';
 import { UpdateUserDto } from './updateuser.dto';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
+import { UsersRoles } from './users-roles.entity';
+import { Role } from './role.entity';
 
 @Injectable()
 export class UserService {
@@ -46,15 +48,35 @@ export class UserService {
     const salt = bcrypt.genSaltSync(10);
     const passowrd = bcrypt.hashSync(body.password, salt);
     body.password = passowrd;
-    try {
-      const user = await this.userRepository.save(body);
-      return {
-        ok: true,
-        data: user,
-      };
-    } catch (err) {
-      throw new BadRequestException(err);
-    }
+    return this.dataSource.manager.transaction(
+      async (transactionalEntityManager: EntityManager) => {
+        const userRepositoy = transactionalEntityManager.getRepository(User);
+        const rolesRepositoy = transactionalEntityManager.getRepository(Role);
+        const accessRepository =
+          transactionalEntityManager.getRepository(UsersRoles);
+        const user = await userRepositoy.save(body);
+        if (body.access_roles) {
+          const userRoles = await Promise.all(
+            body.access_roles.map(async (role) => {
+              const roleCol = await rolesRepositoy.findOne({
+                where: {
+                  role,
+                },
+              });
+              const accessRole = new UsersRoles();
+              accessRole.role = roleCol;
+              accessRole.user = user;
+              return accessRole;
+            }),
+          );
+          await accessRepository.save(userRoles);
+        }
+        return {
+          ok: true,
+          data: user,
+        };
+      },
+    );
   }
 
   async getPaged(query: PagedUserDto): Promise<PagedResponse<User>> {

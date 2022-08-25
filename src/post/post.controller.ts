@@ -7,7 +7,7 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreatePostDto } from './createpost.dto';
 import { PagesPostDto } from './pagedpost.dto';
 import { Post } from './post.entity';

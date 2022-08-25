@@ -2,6 +2,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Post } from '../post/post.entity';
 import { Todo } from '../todos/todos.enitity';
 import { Comment } from '../comment/comment.entity';
+import { UsersRoles } from './users-roles.entity';
 
 @Entity()
 export class User {
@@ -69,4 +70,7 @@ export class User {
 
   @OneToMany(() => Comment, (comment) => comment.commenter)
   commentsGiven: Comment[];
+
+  @OneToMany(() => UsersRoles, (roles) => roles.user, { eager: true })
+  roles: UsersRoles[];
 }

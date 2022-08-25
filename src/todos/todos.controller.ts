@@ -7,7 +7,7 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateTodoDto } from './createtodo.dto';
 import { PagedTodoDto } from './pagedtodo.dto';
 import { Todo } from './todos.enitity';

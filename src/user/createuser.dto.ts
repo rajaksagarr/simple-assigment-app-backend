@@ -1,4 +1,11 @@
-import { IsEmail, IsOptional, IsString, Length } from 'class-validator';
+import {
+  IsArray,
+  IsEmail,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
+import { RolesKeys } from '../auth/roles.decorator';
 
 export class CreateUserDto {
   @IsString()
@@ -34,4 +41,7 @@ export class CreateUserDto {
   @IsString()
   @Length(6, 10)
   zipcode: string;
+
+  @IsArray()
+  access_roles: RolesKeys[];
 }

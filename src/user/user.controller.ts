@@ -7,15 +7,20 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guards';
+import { Roles } from '../auth/roles.decorator';
 import { PagedUserDto } from './pageduser.dto';
 import { UpdateUserDto } from './updateuser.dto';
 import { UserService } from './user.service';
-@UseGuards(JwtAuthGuard)
+
+
 @Controller('user')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Roles('Admin')
   @Patch()
   async update(@Body(new ValidationPipe()) updateUserDto: UpdateUserDto) {
     return this.userService.updateUser(updateUserDto);

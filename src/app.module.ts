@@ -12,6 +12,10 @@ import { CommentModule } from './comment/comment.module';
 import { Comment } from './comment/comment.entity';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UsersRoles } from './user/users-roles.entity';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/guards/roles.guards';
+import { Role } from './user/role.entity';
 
 @Module({
   imports: [
@@ -25,7 +29,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         username: configService.get('USERNAME'),
         password: configService.get('PASSWORD'),
         database: configService.get('DATABASE'),
-        entities: [User, Todo, Post, Comment],
+        entities: [UsersRoles, Role, User, Todo, Post, Comment],
         synchronize: true,
         logging: true,
       }),
